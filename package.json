@@ -1,0 +1,11 @@
+{
+  "name": "bot-teste",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Gadiel Kalleb",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.3",
+    "telebot": "^1.2.6"
+  }
+}
