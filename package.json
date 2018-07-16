@@ -1,11 +1,22 @@
 {
-  "name": "bot-teste",
+  "name": "bot-financeiro",
+  "description": "bot para salvar meus gastos na rua(guloseimas, salgados, etc)",
   "version": "1.0.0",
   "main": "index.js",
   "author": "Gadiel Kalleb",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
   "dependencies": {
-    "express": "^4.16.3",
+    "dotenv": "^6.0.0",
+    "moment": "^2.22.2",
+    "mongoose": "^5.2.3",
     "telebot": "^1.2.6"
+  },
+  "devDependencies": {
+    "chalk": "^2.4.1",
+    "nodemon": "^1.18.2"
   }
 }
