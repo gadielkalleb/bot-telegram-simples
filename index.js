@@ -6,4 +6,3 @@ const bot = new Telebot(process.env.BOT_TOKEN);
 require(path.resolve('./bot'))(bot);
 
 bot.start();
-// module.exports = bot
