@@ -1,8 +1,9 @@
-const bot = require('./botConf')
+require('dotenv').config()
+const Telebot = require('telebot');
+const path = require('path');
+const bot = new Telebot(process.env.BOT_TOKEN);
 
-const { salvar, exibir } = require('./controllers/botCommands')
+require(path.resolve('./bot'))(bot);
 
-bot.on('/salvar', salvar)
-bot.on('/exibir', exibir)
-
-bot.start()
+bot.start();
+// module.exports = bot
