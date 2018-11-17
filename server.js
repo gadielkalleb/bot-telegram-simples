@@ -11,6 +11,10 @@ global.bots = new Map()
 const BotTelegram = require('./bot/controllers/BotTelegram')
 const gastoDb = require('./bot/models/GastosGerais')
 
+
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true}))
+
 app.get('/', (req, res) => {
   res.send('funcionando')
 })

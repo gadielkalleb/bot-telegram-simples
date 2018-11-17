@@ -6,8 +6,9 @@ class BotTelegram {
       throw new error('token não informado')
     } else {
       this.Bot = new Telebot(token)
-      this.bd = bd
+      this.db = db
       this.salvar()
+      this.exibir()
       this.Bot.start()
 
     }
@@ -31,6 +32,25 @@ class BotTelegram {
             this.Bot.sendMessage('Não foi possivel salvar seus gastos, houve algum problema')
             console.log(error)
           }
+        }
+      }
+    })
+  }
+
+  exibir() {
+    this.Bot.on('/exibir', async msg => {
+      if (msg.chat.username !== process.env.USERNAME && msg.from.id !== process.env.ID) {
+        this.Bot.sendMessage(msg.from.id, 'Você não é meu criador não vou atender suas solicitações')
+      } else {
+        try {
+          const msgExibir = await this.db.find({}).sort({ createdAt: -1 }).limit(6)
+          for (let i = 0; i < msgExibir.length; i++) {
+            let li = msgExibir[i]
+            await this.Bot.sendMessage(msg.from.id, `O valor R$${li.valor}, foi gasto em ${li.descricao} no dia ${li.criadoEm}`)
+          }
+        } catch (error) {
+          console.log('error: ',error)
+          this.Bot.sendMessage(msg.from.id, 'não foi possivel retornar a lista de gastos')
         }
       }
     })
