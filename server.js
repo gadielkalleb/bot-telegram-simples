@@ -9,7 +9,7 @@ const { db, port, botToken } = require('./config/dev')
 global.bots = new Map()
 
 const BotTelegram = require('./bot/controllers/BotTelegram')
-
+const gastoDb = require('./bot/models/GastosGerais')
 
 app.get('/', (req, res) => {
   res.send('funcionando')
@@ -18,5 +18,5 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
   console.log(`server rodando na porta ${port}`)
   mongodb.start(db)
-  global.bots.set('bot-telegram', new BotTelegram(botToken))
+  global.bots.set('bot-telegram', new BotTelegram(botToken, gastoDb))
 })
