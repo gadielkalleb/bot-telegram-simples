@@ -1,15 +1,10 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const { db } = require('../config/dev')
+
+console.time('tempo de execução do mongoose')
+mongoose.set('useCreateIndex', true)
+mongoose.connect(db, { useNewUrlParser: true });
 mongoose.Promise = require('bluebird')
+console.timeEnd('tempo de execução do mongoose')
 
-function MongooseStart () {}
-
-MongooseStart.prototype.start = function (urlDB) {
-  console.time('tempo de execução do mongoose conect')
-  mongoose
-    .connect(urlDB, { useNewUrlParser: true })
-    .then(() => console.log('conectado com o mongodb'))
-    .catch(e => console.log('erro ao conectar ao mongodb', e))
-  console.timeEnd('tempo de execução do mongoose conect')
-}
-
-module.exports = new MongooseStart()
+module.exports = mongoose;
