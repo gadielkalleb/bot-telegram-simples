@@ -1,6 +1,6 @@
 const path = require('path')
 
-const mongoose = require(path.resolve('./db'))
+const mongoose = require(path.resolve('./db/mongoose'))
 
 const ListaDesejosSchema = new mongoose.Schema({
   user: {
