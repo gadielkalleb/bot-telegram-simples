@@ -1,5 +1,5 @@
-const path = require('path')
 const express = require('express')
+const path = require('path')
 
 const router = express.Router()
 /**
@@ -9,14 +9,11 @@ const authMiddleware = require(path.resolve('./api/middlewares/auth'))
 /**
  * @description controller para as rotas de gasto mensal
  */
-const gmController = require(path.resolve('./app/controllers/gastosMensaisController'))
+const despesas = require('../despesas')
 
 
 router.use(authMiddleware)
-
-router.post('/save', gmController.save)
-
-router.get('/show', gmController.show)
+router.post('/save', despesas.save)
+router.get('/show', despesas.show)
 
 module.exports = router
-// module.exports = app => app.use('/gastosmensais', router)

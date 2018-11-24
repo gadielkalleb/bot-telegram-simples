@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken')
 const crypto = require('crypto')
 const path = require('path')
 
+
 const User = require(path.resolve('./api/models/user'))
 const authConfig = process.env.JWT_SECRET || require(path.resolve('./config/auth.json'))
 const mailer = require(path.resolve('./modules/mailer'))

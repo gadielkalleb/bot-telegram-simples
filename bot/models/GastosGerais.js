@@ -1,7 +1,7 @@
 const path = require('path')
 const moment = require('moment')
 
-const mongoose = require(path.resolve('./db'))
+const mongoose = require(path.resolve('./db/mongoose'))
 
 const GastosGeraisSchema = new mongoose.Schema({
   valor: {

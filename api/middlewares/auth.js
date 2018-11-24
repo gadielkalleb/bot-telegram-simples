@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const path = require('path')
 
-const authConfig = require(path.resolve('./config/auth.json'))
+const authConfig = require(path.resolve('./config/jsonConfig/auth.json'))
 
 /**
  * @description modulo de de validação de token

@@ -1,5 +1,5 @@
 module.exports = {
   auth: require('./auth'),
-  gastosMensais: require('./gastosMensais'),
+  despesas: require('./despesas'),
   listaDesejos: require('./listadesejos'),
 }
