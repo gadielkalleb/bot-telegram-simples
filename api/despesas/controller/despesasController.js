@@ -7,36 +7,39 @@ class DespesasController {
     }
   }
 
-  async save (req, res) {
-    const despesa = await Despesas.create(req.body)
-    try {
-      res.status(200).send({
-        ok: true,
-        despesa,
+  save (req, res) {
+    Despesas
+      .create(req.body)
+      .then(() => {
+        res.status(200).send({
+          ok: true,
+          message: 'Despesa salva'
+        })
       })
-    } catch (err) {
-      res.status(400).send({
-        ok: false,
-        message: 'Não foi possivel salvar seus gastos nesse momento tente mais tarde!',
+      .catch(err => {
+        res.status(400).send({
+          ok: false,
+          message: 'Não foi possivel salvar seus gastos nesse momento tente mais tarde!',
+        })
       })
-    }
-  }
-  
-  async show (req, res) {
-    const despesas = await Despesas.find({ user: req.userId })
-    try {
-      res.status(200).send({
-        status: 'ok',
-        despesas,
-      })
-    } catch (error) {
-      res.status(400).send({
-        status: 200,
-        message: 'Not found',
-      })
-    }
   }
 
+  show (req, res) {
+    Despesas
+      .find({ user: req.userId })
+      .then(despesas => {
+        res.status(200).send({
+          status: 'ok',
+          despesas,
+        })
+      })
+      .catch(error => {
+        res.status(400).send({
+          status: 200,
+          message: 'Not found',
+        })
+    })
+  }
 }
 
 module.exports = DespesasController
