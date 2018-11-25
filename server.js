@@ -3,13 +3,12 @@ const bodyParser = require('body-parser')
 
 const app = express()
 
-const { port, botToken } = require('./config/dev')
-
-global.bots = new Map()
+const { port } = require('./config/dev')
 
 const api = require('./api')
-const BotTelegram = require('./bot/controllers/BotTelegram')
-const gastoDb = require('./bot/models/GastosGerais')
+const botTelegram = require('./botTelegram')
+
+global.bots = new Map()
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -20,5 +19,6 @@ app.use('/api', api)
 
 app.listen(port, () => {
   console.log(`server rodando na porta ${port}`)
-  // global.bots.set('bot-telegram', new BotTelegram(botToken, gastoDb))
+
+  global.bots.set('bot-telegram', botTelegram)
 })

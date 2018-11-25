@@ -1,14 +1,14 @@
 const Telebot = require('telebot');
 
 class BotTelegram {
-  constructor(params) {
-    if (!params.token) {
-      throw new error('token não informado')
+  constructor(token, db) {
+    if (!token && !db) {
+      throw new error('bot sem parametros')
     } else {
-      Object.assign(this, params)
+      this.Bot = new Telebot(token)
+      this.db = db
 
-      this.Bot = new Telebot(this.params.token)
-      this.db = require(this.params.pathDB)
+      console.log('bot Carregado com sucesso')
 
       this.salvar()
       this.exibir()
@@ -45,6 +45,9 @@ class BotTelegram {
         .sort({ createdAt: -1 })
         .limit(6)
         .then(async gastos => {
+          if (gastos.length <= 0 ) {
+            this.Bot.sendMessage(msg.from.id, 'Nenhum valor encontrado')
+          }
           for (let i = 0; i < gastos.length; i++) {
             let li = gastos[i]
             await this.Bot.sendMessage(msg.from.id, `O valor R$${li.valor}, foi gasto em ${li.descricao} no dia ${li.criadoEm}`)
