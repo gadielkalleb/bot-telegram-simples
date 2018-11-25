@@ -1,12 +1,15 @@
 const Telebot = require('telebot');
 
 class BotTelegram {
-  constructor(token, db) {
-    if (!token) {
+  constructor(params) {
+    if (!params.token) {
       throw new error('token não informado')
     } else {
-      this.Bot = new Telebot(token)
-      this.db = db
+      Object.assign(this, params)
+
+      this.Bot = new Telebot(this.params.token)
+      this.db = require(this.params.pathDB)
+
       this.salvar()
       this.exibir()
       this.Bot.start()
@@ -55,7 +58,7 @@ class BotTelegram {
   }
 
   checkUser (msg) {
-    if (msg.chat.username !== process.env.USERNAME && msg.from.id !== process.env.ID) {
+    if (msg.chat.username !== process.env.USERNAME) {
       this.Bot.sendMessage(msg.from.id, 'Você não é meu criador não vou atender suas solicitações')
       return false
     } 
