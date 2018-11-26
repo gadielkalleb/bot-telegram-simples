@@ -19,6 +19,5 @@ app.use('/api', api)
 
 app.listen(port, () => {
   console.log(`server rodando na porta ${port}`)
-
   global.bots.set('bot-telegram', botTelegram)
 })
