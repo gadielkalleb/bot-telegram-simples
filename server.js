@@ -3,7 +3,7 @@ const bodyParser = require('body-parser')
 
 const app = express()
 
-const { port } = require('./config/dev')
+const { port } = require('./config')
 
 const api = require('./api')
 const botTelegram = require('./botTelegram')

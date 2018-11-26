@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { db } = require('../config/dev')
+const { db } = require('../config')
 
 mongoose.Promise = require('bluebird')
 
