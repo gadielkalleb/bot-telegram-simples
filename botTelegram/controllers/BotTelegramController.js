@@ -6,38 +6,26 @@ class BotTelegram {
     if (!token && !db) {
       throw new error('bot sem parametros')
     } else {
-      this.Bot = new Telebot(token)
       this.db = db
+      this.Bot = new Telebot(token)
+      this.client = new Wit({ accessToken: process.env.WIT_TOKEN });
 
-      this.salvar()
       this.exibir()
       this.witMessage()
       this.Bot.start()
     }
   }
   
-  salvar() {
-    this.Bot.on('/salvar', msg => {
-      if (msg.chat.username !== process.env.USERNAME && msg.chat.id !== process.env.ID) {
-        this.Bot.sendMessage(msg.from.id, 'Você não é meu criador não vou atender suas solicitações')
-        return false
-      } 
-      if ((!msg.text.split(' ')[1]) || (!msg.text.split(' ')[2])) {
-        this.Bot.sendMessage(msg.from.id, 'é necessario informar valor e descrição depois do comando salvar! Ex: /salvar 12 teste-descrição');
-        return false
-      } else {
-        this.db
-          .create({ valor: msg.text.split(' ')[1], descricao:  msg.text.split(' ')[2]})
-          .then(() => {
-            this.Bot.sendMessage(msg.from.id, `Oi ${msg.from.first_name} anotei o valor de R$${msg.text.split(' ')[1]}, que foi gasto em ${msg.text.split(' ')[2]}!!!`)
-          })
-          .catch(error => {
-            this.Bot.sendMessage('Não foi possivel salvar seus gastos, houve algum problema')
-            console.log(error)
-        })
-      }
-      
-    })
+  salvar(payload) {
+    this.db
+      .create({ valor: payload.valor, descricao: payload.descricao })
+      .then(() => {
+        this.Bot.sendMessage(payload.msgId, `Oi ${payload.first_name} salvei o valor de R$ ${payload.valor}, que foi gasto ${payload.descricao}!!!`)
+      })
+      .catch(error => {
+        console.log(error)
+        this.Bot.sendMessage('Não foi possivel salvar seus gastos, houve algum problema!')
+    })     
   }
 
   exibir() {
@@ -71,16 +59,20 @@ class BotTelegram {
     this.Bot.on('text', msg => {
       if (msg.chat.username !== process.env.USERNAME && msg.chat.id !== process.env.ID) {
         this.Bot.sendMessage(msg.from.id, 'Você não é meu criador não vou atender suas solicitações')
-        return false
       } else {
-        const client = new Wit({
-          accessToken: process.env.WIT_TOKEN
-        });
-        client.message(msg.text).then(response => {
-          Object.keys(response.entities).forEach(res => {
-            console.log(res == 'salvar')
-          })
-          console.log(response.entities)
+        this.client.message(msg.text).then(response => {
+          if (Object.keys(response.entities).includes('salvar')) {
+            let payload = {
+              msgId: msg.from.id,
+              first_name: msg.from.first_name,
+              valor: response.entities.amount_of_money[0].value,
+              descricao: response.entities.local_search_query[0].value
+            }
+            this.salvar(payload)
+          }
+        }).catch(e => {
+          console.log(e)
+          this.Bot.sendMessage(msg.from.id, 'Erro ao processar sua solicitação')
         })
       }
     })
