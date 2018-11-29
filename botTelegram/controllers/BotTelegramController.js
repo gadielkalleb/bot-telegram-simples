@@ -1,17 +1,14 @@
 const Telebot = require('telebot');
-const { Wit } = require('node-wit')
+const witClient = require('../../wit')
 
 class BotTelegram {
   constructor(token, db) {
     if (!token && !db) {
       throw new error('bot sem parametros')
     } else {
-      this.db = db
-      this.Bot = new Telebot(token)
-      this.client = new Wit({ accessToken: process.env.WIT_TOKEN });
-
+      Object.assign(this, { db, witClient, Bot: new Telebot(token)} )
       this.exibir()
-      this.witMessage()
+      this.watchMessage()
       this.Bot.start()
     }
   }
@@ -55,25 +52,26 @@ class BotTelegram {
     })
   }
 
-  witMessage() {
+  watchMessage() {
     this.Bot.on('text', msg => {
       if (msg.chat.username !== process.env.USERNAME && msg.chat.id !== process.env.ID) {
         this.Bot.sendMessage(msg.from.id, 'Você não é meu criador não vou atender suas solicitações')
       } else {
-        this.client.message(msg.text).then(response => {
-          if (Object.keys(response.entities).includes('salvar')) {
-            let payload = {
-              msgId: msg.from.id,
-              first_name: msg.from.first_name,
-              valor: response.entities.amount_of_money[0].value,
-              descricao: response.entities.local_search_query[0].value
+        this.witClient.witSendMessage(msg.text)    
+          .then(response => {
+            if (Object.keys(response.entities).includes('salvar')) {
+              let payload = {
+                msgId: msg.from.id,
+                first_name: msg.from.first_name,
+                valor: response.entities.amount_of_money[0].value,
+                descricao: response.entities.local_search_query[0].value
+              }
+              this.salvar(payload)
             }
-            this.salvar(payload)
-          }
-        }).catch(e => {
-          console.log(e)
-          this.Bot.sendMessage(msg.from.id, 'Erro ao processar sua solicitação')
-        })
+          }).catch(e => {
+            console.log(e)
+            this.Bot.sendMessage(msg.from.id, 'Erro ao processar sua solicitação')
+          })
       }
     })
   }
