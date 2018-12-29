@@ -1,10 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
-const Logger = require('logplease');
 const morgan = require('morgan')
 const cookieParser = require('cookie-parser');
-
-const logger = (nameFile) => Logger.create(nameFile);
 
 const app = express()
 

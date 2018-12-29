@@ -6,8 +6,8 @@
   "author": "Gadiel Kalleb",
   "license": "MIT",
   "scripts": {
-    "start": "node app.js",
-    "dev": "nodemon app.js",
+    "start": "node ./bin/www",
+    "dev": "nodemon ./bin/www",
     "test": "find ./ -name '*.test.js' | xargs ./node_modules/.bin/mocha --reporter spec"
   },
   "dependencies": {
