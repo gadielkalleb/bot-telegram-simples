@@ -13,7 +13,7 @@ const despesas = require('../despesas')
 
 
 router.use(authMiddleware)
-router.post('/save', despesas.save)
-router.get('/show', despesas.show)
+router.post('/', despesas.save)
+router.get('/', despesas.show)
 
 module.exports = router
