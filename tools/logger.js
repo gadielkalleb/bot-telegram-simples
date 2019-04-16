@@ -1,5 +1,10 @@
 const Logger = require('logplease');
 
-module.exports = nameFile => {
-  return Logger.create(nameFile);
+function newLog(fileName) {
+  return Logger.create(fileName);
+}
+
+module.exports = {
+  logInfo: (fileName, msg) => newLog(fileName).info(msg),
+  logError: (fileName, msg) => newLog(fileName).error(msg),
 };

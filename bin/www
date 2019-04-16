@@ -27,7 +27,7 @@ var server = http.createServer(app);
  */
 
 server.listen(port, function() {
-  logger(__filename).info(`connected port: ${port}`);
+  logger.logInfo(__filename, `connected port: ${port}`);
 });
 server.on('error', onError);
 server.on('listening', onListening);

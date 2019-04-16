@@ -1,11 +1,5 @@
 const Telebot = require('telebot');
 const witClient = require('../../wit')
-const payload = ({id, first_name}, { amount_of_money, local_search_query }) => ({
-  msgId: id,
-  first_name,
-  valor: amount_of_money[0].value,
-  descricao: local_search_query[0].value
-})
 
 class BotTelegram {
   constructor(token, db) {
@@ -15,6 +9,15 @@ class BotTelegram {
       Object.assign(this, { db, witClient, Bot: new Telebot(token)} )
       this.watchMessage()
       this.Bot.start()
+    }
+  }
+
+  payload({id, first_name}, { amount_of_money, local_search_query }) {
+    return {
+      msgId: id,
+      first_name,
+      valor: amount_of_money[0].value,
+      descricao: local_search_query[0].value
     }
   }
   
@@ -56,17 +59,26 @@ class BotTelegram {
       }
       try {
         const response = await this.witClient.witSendMessage(msg.text)
+
         if (Object.keys(response.entities).includes('salvar')) {
-          this.salvar(payload(msg.from, response.entities))
+
+          this.salvar(this.payload(msg.from, response.entities))
+
         } 
-        else if(Object.keys(response.entities).includes('exibir')) {}
-        else { console.log('não deu')}
+        
+        else if (Object.keys(response.entities).includes('exibir')) {} 
+        
+        else {
+          console.log('não deu')
+        }
+
       } catch (e) {
         console.log(e)
-         this.Bot.sendMessage(msg.from.id, 'Erro ao processar sua solicitação')
+        this.Bot.sendMessage(msg.from.id, 'Erro ao processar sua solicitação')
       }
     })
   }
+
 }
 
 module.exports = BotTelegram

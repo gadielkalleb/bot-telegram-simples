@@ -1,5 +1,4 @@
 const { logger } = require('../../../tools');
-const logError = (err) => logger(__filename).error(`error : ${err}`);
 
 const DespesasController = model => ({
 
@@ -11,7 +10,7 @@ const DespesasController = model => ({
         message: 'Despesa salva'
       });
     } catch (err) {
-      logError(err);
+      logger.logError(__filename, `error : ${err}`);
       res.status(400).send({
         ok: false,
         message: 'Não foi possivel salvar seus gastos nesse momento tente mais tarde!',
@@ -27,7 +26,7 @@ const DespesasController = model => ({
         despesas,
       }) 
     } catch (err) {
-      logError(err);
+      logger.logError(__filename, `error : ${err}`);
       res.status(400).send({
         status: 200,
         message: 'Not found',
